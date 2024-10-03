@@ -2,7 +2,9 @@ package me.jibajo.dream_shop.service.product;
 
 import me.jibajo.dream_shop.dto.ImageDTO;
 import me.jibajo.dream_shop.dto.ProductDTO;
+import me.jibajo.dream_shop.exception.AlreadyExistsException;
 import me.jibajo.dream_shop.exception.ProductNotFoundException;
+import me.jibajo.dream_shop.exception.ResourceNotFoundException;
 import me.jibajo.dream_shop.model.Category;
 import me.jibajo.dream_shop.model.Image;
 import me.jibajo.dream_shop.model.Product;
@@ -31,6 +33,9 @@ public class ProductService implements IProductService {
 
     @Override
     public Product addProduct(AddProductRequest product) {
+        if(isProductExist(product.getBrand(), product.getName())) {
+            throw new AlreadyExistsException(product.getBrand()+" "+product.getName() +" already exists");
+        }
         Category category = Optional.ofNullable(categoryRepository.findByName(product.getCategory().getName()))
                 .orElseGet(() -> {
                     Category newCategory = new Category(product.getCategory().getName());
@@ -38,6 +43,10 @@ public class ProductService implements IProductService {
                 });
         product.setCategory(category);
         return productRepository.save(createProduct(product, category));
+    }
+
+    private boolean isProductExist(String brand, String name){
+        return productRepository.existsByBrandAndName(brand, name);
     }
 
     private Product createProduct(AddProductRequest request, Category category) {
@@ -131,4 +140,5 @@ public class ProductService implements IProductService {
         productDTO.setImageList(imageDTOList);
         return productDTO;
     }
+
 }

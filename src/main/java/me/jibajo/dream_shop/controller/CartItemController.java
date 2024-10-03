@@ -1,15 +1,19 @@
 package me.jibajo.dream_shop.controller;
 
+import io.jsonwebtoken.JwtException;
 import me.jibajo.dream_shop.exception.ResourceNotFoundException;
-import me.jibajo.dream_shop.model.CartItem;
+import me.jibajo.dream_shop.model.Cart;
+import me.jibajo.dream_shop.model.User;
 import me.jibajo.dream_shop.response.APIResponse;
 import me.jibajo.dream_shop.service.cart.ICartItemService;
 import me.jibajo.dream_shop.service.cart.ICartService;
+import me.jibajo.dream_shop.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
 @RequestMapping("${api-prefix}/cartItems")
@@ -18,17 +22,20 @@ public class CartItemController {
     private ICartItemService iCartItemService;
     @Autowired
     private ICartService iCartService;
+    @Autowired
+    private IUserService iUserService;
 
     @PostMapping("/item/add")
-    public ResponseEntity<APIResponse> addItemToCart(@RequestParam(required = false) Long cartId, @RequestParam Long productId, @RequestParam Integer quantity){
+    public ResponseEntity<APIResponse> addItemToCart(@RequestParam Long productId, @RequestParam Integer quantity){
         try {
-            if(cartId == null) {
-                cartId = iCartService.initializeCartId();
-            }
-            iCartItemService.addItemToCart(cartId, productId, quantity);
+            User user = iUserService.getAuthenticatedUser();
+            Cart cart = iCartService.initializeCartId(user);
+            iCartItemService.addItemToCart(cart.getId(), productId, quantity);
             return ResponseEntity.ok(new APIResponse("Item added successfully", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage() , null));
+        } catch (JwtException e) {
+            return ResponseEntity.status(UNAUTHORIZED).body(new APIResponse(e.getMessage() , null));
         }
     }
 

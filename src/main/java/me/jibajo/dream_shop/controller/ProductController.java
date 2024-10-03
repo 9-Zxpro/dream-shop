@@ -1,6 +1,7 @@
 package me.jibajo.dream_shop.controller;
 
 import me.jibajo.dream_shop.dto.ProductDTO;
+import me.jibajo.dream_shop.exception.AlreadyExistsException;
 import me.jibajo.dream_shop.exception.ProductNotFoundException;
 import me.jibajo.dream_shop.exception.ResourceNotFoundException;
 import me.jibajo.dream_shop.model.Category;
@@ -11,6 +12,7 @@ import me.jibajo.dream_shop.response.APIResponse;
 import me.jibajo.dream_shop.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,16 +45,19 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<APIResponse> addProduct(@RequestBody AddProductRequest product) {
         try {
             Product theProduct = iProductService.addProduct(product);
-            return ResponseEntity.ok(new APIResponse("Added Successfully ", theProduct));
-        } catch (ResourceNotFoundException e) {
+            ProductDTO productDTO = iProductService.convertToDTO(theProduct);
+            return ResponseEntity.ok(new APIResponse("Added Successfully ", productDTO));
+        } catch (ResourceNotFoundException | AlreadyExistsException e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new APIResponse("Error:", e.getMessage()));
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity<APIResponse> updateProduct(@RequestBody ProductUpdateRequest product, @PathVariable Long id) {
         try {
@@ -63,6 +68,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<APIResponse> deleteProductById(@PathVariable Long id) {
         try {
@@ -143,6 +149,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/brand-and-name/count")
     public ResponseEntity<APIResponse> countProductsByBrandAndName(@RequestParam String brand, @RequestParam String name) {
         try {

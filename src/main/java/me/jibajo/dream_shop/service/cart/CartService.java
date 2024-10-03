@@ -2,12 +2,16 @@ package me.jibajo.dream_shop.service.cart;
 
 import me.jibajo.dream_shop.exception.ResourceNotFoundException;
 import me.jibajo.dream_shop.model.Cart;
+import me.jibajo.dream_shop.model.User;
 import me.jibajo.dream_shop.repository.CartItemRepository;
 import me.jibajo.dream_shop.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
@@ -31,6 +35,7 @@ public class CartService implements ICartService{
         return cartRepository.save(cart);
     }
 
+    @Transactional
     @Override
     public void clearCart(Long id) {
         Cart cart = getCart(id);
@@ -46,10 +51,17 @@ public class CartService implements ICartService{
     }
 
     @Override
-    public Long initializeCartId() {
-        Cart cart = new Cart();
-        Long newCartId = cartIdGenerator.incrementAndGet();
-        cart.setId(newCartId);
-        return cartRepository.save(cart).getId();
+    public Cart initializeCartId(User user) {
+        return Optional.ofNullable(getCartByUserId(user.getId()))
+                .orElseGet(() -> {
+                    Cart cart = new Cart();
+                    cart.setUser(user);
+                    return cartRepository.save(cart);
+                });
+    }
+
+    @Override
+    public Cart getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId);
     }
 }

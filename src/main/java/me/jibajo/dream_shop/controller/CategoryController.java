@@ -1,6 +1,6 @@
 package me.jibajo.dream_shop.controller;
 
-import me.jibajo.dream_shop.exception.AlreadyExistException;
+import me.jibajo.dream_shop.exception.AlreadyExistsException;
 import me.jibajo.dream_shop.model.Category;
 import me.jibajo.dream_shop.response.APIResponse;
 import me.jibajo.dream_shop.service.category.ICategoryService;
@@ -29,12 +29,12 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/add-category")
+    @PostMapping("/add-category")
     public ResponseEntity<APIResponse> addCategory(@RequestBody Category name) {
         try {
             Category category = iCategoryService.addCategory(name);
             return ResponseEntity.ok(new APIResponse("Success", category));
-        } catch (AlreadyExistException e) {
+        } catch (AlreadyExistsException e) {
             return ResponseEntity.status(CONFLICT).body(new APIResponse(e.getMessage(), null));
         }
     }
@@ -44,7 +44,7 @@ public class CategoryController {
         try {
             Category category = iCategoryService.getCategoryById(id);
             return ResponseEntity.ok(new APIResponse("Found", category));
-        } catch (AlreadyExistException e) {
+        } catch (AlreadyExistsException e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
         }
     }
@@ -54,7 +54,7 @@ public class CategoryController {
         try {
             Category category = iCategoryService.getCategoryByName(name);
             return ResponseEntity.ok(new APIResponse("Found", category));
-        } catch (AlreadyExistException e) {
+        } catch (AlreadyExistsException e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
         }
     }
@@ -64,7 +64,7 @@ public class CategoryController {
         try {
             iCategoryService.deleteCategoryById(id);
             return ResponseEntity.ok(new APIResponse("Found", null));
-        } catch (AlreadyExistException e) {
+        } catch (AlreadyExistsException e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
         }
     }
@@ -74,7 +74,7 @@ public class CategoryController {
         try {
             Category updateCategory = iCategoryService.updateCategory(category, id);
             return ResponseEntity.ok(new APIResponse("Update Successful", updateCategory));
-        } catch (AlreadyExistException e) {
+        } catch (AlreadyExistsException e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
         }
     }

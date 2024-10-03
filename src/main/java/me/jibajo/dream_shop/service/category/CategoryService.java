@@ -1,6 +1,6 @@
 package me.jibajo.dream_shop.service.category;
 
-import me.jibajo.dream_shop.exception.AlreadyExistException;
+import me.jibajo.dream_shop.exception.AlreadyExistsException;
 import me.jibajo.dream_shop.exception.ResourceNotFoundException;
 import me.jibajo.dream_shop.model.Category;
 import me.jibajo.dream_shop.repository.CategoryRepository;
@@ -42,7 +42,7 @@ public class CategoryService implements ICategoryService{
                     }
                 })
                 .map(categoryRepository::save)
-                .orElseThrow(() -> new AlreadyExistException(category.getName() + "already exist"));
+                .orElseThrow(() -> new AlreadyExistsException(category.getName() + "already exist"));
     }
 
     @Override
