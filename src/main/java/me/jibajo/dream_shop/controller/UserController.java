@@ -3,7 +3,6 @@ package me.jibajo.dream_shop.controller;
 import me.jibajo.dream_shop.dto.UserDTO;
 import me.jibajo.dream_shop.exception.AlreadyExistsException;
 import me.jibajo.dream_shop.exception.ResourceNotFoundException;
-import me.jibajo.dream_shop.model.Order;
 import me.jibajo.dream_shop.model.User;
 import me.jibajo.dream_shop.requests.CreateUserRequest;
 import me.jibajo.dream_shop.requests.UpdateUserRequest;
@@ -13,7 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequestMapping("${api-prefix}/users")

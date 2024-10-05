@@ -5,7 +5,6 @@ import me.jibajo.dream_shop.exception.ResourceNotFoundException;
 import me.jibajo.dream_shop.model.Image;
 import me.jibajo.dream_shop.model.Product;
 import me.jibajo.dream_shop.repository.ImageRepository;
-import me.jibajo.dream_shop.repository.ProductRepository;
 import me.jibajo.dream_shop.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -4,7 +4,6 @@ import me.jibajo.dream_shop.dto.ImageDTO;
 import me.jibajo.dream_shop.dto.ProductDTO;
 import me.jibajo.dream_shop.exception.AlreadyExistsException;
 import me.jibajo.dream_shop.exception.ProductNotFoundException;
-import me.jibajo.dream_shop.exception.ResourceNotFoundException;
 import me.jibajo.dream_shop.model.Category;
 import me.jibajo.dream_shop.model.Image;
 import me.jibajo.dream_shop.model.Product;

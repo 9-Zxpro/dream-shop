@@ -1,6 +1,5 @@
 package me.jibajo.dream_shop.controller;
 
-import lombok.Getter;
 import me.jibajo.dream_shop.exception.ResourceNotFoundException;
 import me.jibajo.dream_shop.model.Cart;
 import me.jibajo.dream_shop.response.APIResponse;

@@ -2,7 +2,6 @@ package me.jibajo.dream_shop.dto;
 
 import lombok.Data;
 import me.jibajo.dream_shop.model.Category;
-import me.jibajo.dream_shop.model.Image;
 
 import java.math.BigDecimal;
 import java.util.List;
