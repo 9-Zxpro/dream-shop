@@ -49,8 +49,7 @@ public class ImageService implements IImageService{
                 image.setProduct(product);
 
                 String buildPath = "/api/v1/images/image/download/";
-                String downloadUrl = buildPath + image.getId();
-                image.setDownloadUrl(downloadUrl);
+                image.setDownloadUrl(buildPath);
                 Image savedImage = imageRepository.save(image);
 
                 savedImage.setDownloadUrl(buildPath + savedImage.getId());

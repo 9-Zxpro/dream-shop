@@ -30,9 +30,9 @@ public class ImageController {
     public ResponseEntity<APIResponse> saveImages(@RequestParam List<MultipartFile> files, @RequestParam Long productId) {
         try {
             List<ImageDTO> imageDTOList = iImageService.saveImages(files, productId);
-            return ResponseEntity.ok(new APIResponse("Uploaded ", imageDTOList));
+            return ResponseEntity.ok(new APIResponse("Uploaded", imageDTOList));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new APIResponse("Uploaded failed ", e.getMessage()));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new APIResponse("Uploaded failed", e.getMessage()));
         }
 
     }
@@ -53,12 +53,12 @@ public class ImageController {
             Image image = iImageService.getImageById(id);
             if(image != null) {
                 iImageService.updateImage(file, id);
-                return ResponseEntity.ok(new APIResponse("Update successfully ", null));
+                return ResponseEntity.ok(new APIResponse("Update successfully", null));
             }
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
         }
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new APIResponse("Update failed ", INTERNAL_SERVER_ERROR));
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new APIResponse("Update failed", INTERNAL_SERVER_ERROR));
     }
 
     @DeleteMapping("/delete/{id}")
@@ -67,12 +67,12 @@ public class ImageController {
             Image image = iImageService.getImageById(id);
             if(image != null) {
                 iImageService.deleteImageById(id);
-                return ResponseEntity.ok(new APIResponse("Deleted successfully ", null));
+                return ResponseEntity.ok(new APIResponse("Deleted successfully", null));
             }
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
         }
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new APIResponse("Deletion failed ", INTERNAL_SERVER_ERROR));
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new APIResponse("Deletion failed", INTERNAL_SERVER_ERROR));
     }
 
 }
